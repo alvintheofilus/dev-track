@@ -4,6 +4,7 @@ import KanbanBoard from '../components/KanbanBoard';
 import Modal from '../components/Modal';
 import Navbar from '../components/Navbar';
 import FilterBar, { SortOption } from '../components/FilterBar';
+import { SkeletonBoard } from '../components/SkeletonCard';
 import { Job } from '../types';
 
 const exportToCSV = (jobs: Job[]) => {
@@ -114,9 +115,16 @@ export default function Dashboard() {
           onExportCSV={() => exportToCSV(displayJobs)}
         />
 
-        {loading && <p className="text-slate-500 text-sm">Loading...</p>}
-        {error && <p className="text-red-600 text-sm">{error}</p>}
-        {!loading && <KanbanBoard jobs={displayJobs} onEdit={openEditModal} />}
+        {loading && <SkeletonBoard />}
+        {!loading && error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+            {error} —{' '}
+            <button onClick={fetchJobs} className="underline hover:no-underline">
+              retry
+            </button>
+          </div>
+        )}
+        {!loading && !error && <KanbanBoard jobs={displayJobs} onEdit={openEditModal} />}
       </main>
 
       {modalOpen && <Modal job={editingJob} onClose={closeModal} />}

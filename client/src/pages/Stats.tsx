@@ -21,7 +21,16 @@ export default function StatsPage() {
       <main className="max-w-4xl mx-auto px-4 py-6">
         <h1 className="text-2xl font-bold text-slate-900 mb-6">Stats</h1>
 
-        {loading && <p className="text-slate-500 text-sm">Loading...</p>}
+        {loading && (
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {Array.from({ length: 7 }).map((_, i) => (
+              <div key={i} className="bg-white rounded-xl border border-slate-200 p-5 animate-pulse space-y-2">
+                <div className="h-3 bg-slate-200 rounded w-1/2" />
+                <div className="h-8 bg-slate-200 rounded w-1/3" />
+              </div>
+            ))}
+          </div>
+        )}
 
         {stats && (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
