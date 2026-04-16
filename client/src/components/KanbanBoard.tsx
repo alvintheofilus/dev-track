@@ -1,4 +1,16 @@
+import { useState } from 'react';
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import { Job, JobStatus } from '../types';
+import { useJobs } from '../hooks/useJobs';
+import KanbanColumn from './KanbanColumn';
 import JobCard from './JobCard';
 
 const COLUMNS: { status: JobStatus; label: string; color: string }[] = [
@@ -14,29 +26,57 @@ interface Props {
 }
 
 export default function KanbanBoard({ jobs, onEdit }: Props) {
+  const { updateJob } = useJobs();
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+  );
+
+  const activeJob = activeId ? jobs.find((j) => j._id === activeId) ?? null : null;
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string);
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    setActiveId(null);
+
+    if (!over) return;
+
+    const jobId = active.id as string;
+    const newStatus = over.id as JobStatus;
+    const job = jobs.find((j) => j._id === jobId);
+
+    if (job && job.status !== newStatus) {
+      updateJob(jobId, { status: newStatus });
+    }
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      {COLUMNS.map(({ status, label, color }) => {
-        const columnJobs = jobs.filter((j) => j.status === status);
-        return (
-          <div
+    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {COLUMNS.map(({ status, label, color }) => (
+          <KanbanColumn
             key={status}
-            className={`bg-slate-50 rounded-lg border-t-4 ${color} p-4 min-h-48`}
-          >
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-slate-700">{label}</h3>
-              <span className="text-xs bg-slate-200 text-slate-600 px-2 py-0.5 rounded-full">
-                {columnJobs.length}
-              </span>
-            </div>
-            <div className="space-y-3">
-              {columnJobs.map((job) => (
-                <JobCard key={job._id} job={job} onEdit={onEdit} />
-              ))}
-            </div>
+            status={status}
+            label={label}
+            color={color}
+            jobs={jobs.filter((j) => j.status === status)}
+            onEdit={onEdit}
+            activeId={activeId}
+          />
+        ))}
+      </div>
+
+      <DragOverlay>
+        {activeJob && (
+          <div className="rotate-2 opacity-90">
+            <JobCard job={activeJob} onEdit={onEdit} />
           </div>
-        );
-      })}
-    </div>
+        )}
+      </DragOverlay>
+    </DndContext>
   );
 }

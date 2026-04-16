@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Job, JobFormData } from '../types';
 import { useJobs } from '../hooks/useJobs';
 import axios from 'axios';
+import api from '../utils/api';
 
 interface Props {
   job?: Job | null;
@@ -24,6 +25,8 @@ export default function Modal({ job, onClose }: Props) {
   const [form, setForm] = useState<JobFormData>(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [reminding, setReminding] = useState(false);
+  const [reminderMsg, setReminderMsg] = useState('');
 
   useEffect(() => {
     if (job) {
@@ -153,21 +156,49 @@ export default function Modal({ job, onClose }: Props) {
             />
           </div>
 
-          <div className="flex justify-end gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
-            >
-              {submitting ? 'Saving...' : job ? 'Save Changes' : 'Add Job'}
-            </button>
+          <div className="flex items-center justify-between pt-2">
+            {job && (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={reminding}
+                  onClick={async () => {
+                    setReminding(true);
+                    setReminderMsg('');
+                    try {
+                      await api.post(`/jobs/${job._id}/remind`);
+                      setReminderMsg('Reminder sent!');
+                    } catch {
+                      setReminderMsg('Failed to send');
+                    } finally {
+                      setReminding(false);
+                    }
+                  }}
+                  className="text-xs text-slate-500 hover:text-slate-700 border border-slate-200 hover:border-slate-300 px-2 py-1 rounded disabled:opacity-50"
+                >
+                  {reminding ? 'Sending...' : 'Send reminder'}
+                </button>
+                {reminderMsg && (
+                  <span className="text-xs text-slate-500">{reminderMsg}</span>
+                )}
+              </div>
+            )}
+            <div className="flex gap-3 ml-auto">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+              >
+                {submitting ? 'Saving...' : job ? 'Save Changes' : 'Add Job'}
+              </button>
+            </div>
           </div>
         </form>
       </div>

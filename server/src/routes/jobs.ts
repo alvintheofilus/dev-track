@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getJobs, createJob, updateJob, deleteJob, getStats } from '../controllers/jobController';
+import { getJobs, createJob, updateJob, deleteJob, getStats, sendReminder } from '../controllers/jobController';
 import { protect } from '../middleware/authMiddleware';
 
 const router = Router();
@@ -12,5 +12,6 @@ router.get('/', getJobs);
 router.post('/', createJob);
 router.put('/:id', updateJob);
 router.delete('/:id', deleteJob);
+router.post('/:id/remind', sendReminder);
 
 export default router;
