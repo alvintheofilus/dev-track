@@ -107,7 +107,6 @@ devtrack/
 ## Roadmap
 
 - [ ] Dark mode toggle
-- [ ] Docker Compose for local dev
 - [ ] Loading skeletons (done)
 - [ ] Browser extension to auto-fill job details
 - [ ] Recurring email digests (weekly pipeline summary)

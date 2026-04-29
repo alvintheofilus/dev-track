@@ -33,39 +33,29 @@ export default function Login() {
     }
   };
 
+  const inputClass =
+    'w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400';
+
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="bg-white w-full max-w-sm rounded-xl shadow-sm border border-slate-200 p-8">
-        <h1 className="text-2xl font-bold text-slate-900 mb-1">DevTrack</h1>
-        <p className="text-sm text-slate-500 mb-6">Sign in to your account</p>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-slate-800 w-full max-w-sm rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-1">DevTrack</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Sign in to your account</p>
 
         {error && (
-          <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded mb-4">{error}</p>
+          <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 px-3 py-2 rounded mb-4">
+            {error}
+          </p>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
-            <input
-              name="email"
-              type="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              autoFocus
-              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Email</label>
+            <input name="email" type="email" value={form.email} onChange={handleChange} required autoFocus className={inputClass} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
-            <input
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Password</label>
+            <input name="password" type="password" value={form.password} onChange={handleChange} required className={inputClass} />
           </div>
           <button
             type="submit"
@@ -76,9 +66,9 @@ export default function Login() {
           </button>
         </form>
 
-        <p className="text-sm text-slate-500 text-center mt-4">
+        <p className="text-sm text-slate-500 dark:text-slate-400 text-center mt-4">
           No account?{' '}
-          <Link to="/register" className="text-blue-600 hover:underline">
+          <Link to="/register" className="text-blue-600 dark:text-blue-400 hover:underline">
             Register
           </Link>
         </p>

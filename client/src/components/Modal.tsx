@@ -29,6 +29,14 @@ export default function Modal({ job, onClose }: Props) {
   const [reminderMsg, setReminderMsg] = useState('');
 
   useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKey);
+    return () => document.removeEventListener('keydown', handleKey);
+  }, [onClose]);
+
+  useEffect(() => {
     if (job) {
       setForm({
         company: job.company,
@@ -82,16 +90,17 @@ export default function Modal({ job, onClose }: Props) {
   };
 
   const inputClass =
-    'w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500';
+    'w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400';
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto">
-        <div className="flex items-center justify-between px-6 py-4 border-b sticky top-0 bg-white">
-          <h2 className="text-lg font-semibold">{job ? 'Edit Job' : 'Add Job'}</h2>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" role="dialog" aria-modal="true">
+      <div className="bg-white dark:bg-slate-800 rounded-xl w-full max-w-lg shadow-xl max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">{job ? 'Edit Job' : 'Add Job'}</h2>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 text-2xl leading-none"
+            aria-label="Close modal"
+            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 text-2xl leading-none"
           >
             &times;
           </button>
@@ -99,27 +108,27 @@ export default function Modal({ job, onClose }: Props) {
 
         <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4">
           {error && (
-            <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded">{error}</p>
+            <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 px-3 py-2 rounded">{error}</p>
           )}
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Company *</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Company *</label>
               <input name="company" value={form.company} onChange={handleChange} required className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Role *</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Role *</label>
               <input name="role" value={form.role} onChange={handleChange} required className={inputClass} />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Salary</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Salary</label>
               <input name="salary" type="number" value={form.salary ?? ''} onChange={handleChange} className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Status</label>
               <select name="status" value={form.status} onChange={handleChange} className={inputClass}>
                 <option value="applied">Applied</option>
                 <option value="interview">Interview</option>
@@ -136,11 +145,11 @@ export default function Modal({ job, onClose }: Props) {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Applied Date *</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Applied Date *</label>
               <input name="appliedDate" type="date" value={form.appliedDate} onChange={handleChange} required className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Follow-up Date</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Follow-up Date</label>
               <input name="followUpDate" type="date" value={form.followUpDate} onChange={handleChange} className={inputClass} />
             </div>
           </div>
@@ -174,7 +183,7 @@ export default function Modal({ job, onClose }: Props) {
                       setReminding(false);
                     }
                   }}
-                  className="text-xs text-slate-500 hover:text-slate-700 border border-slate-200 hover:border-slate-300 px-2 py-1 rounded disabled:opacity-50"
+                  className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-600 hover:border-slate-300 px-2 py-1 rounded disabled:opacity-50"
                 >
                   {reminding ? 'Sending...' : 'Send reminder'}
                 </button>
@@ -187,7 +196,7 @@ export default function Modal({ job, onClose }: Props) {
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg"
+                className="px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg"
               >
                 Cancel
               </button>

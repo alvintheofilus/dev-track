@@ -1,9 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { useThemeStore } from '../store/themeStore';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { dark, toggle } = useThemeStore();
 
   const handleLogout = () => {
     logout();
@@ -20,6 +22,15 @@ export default function Navbar() {
           Stats
         </Link>
         <span className="text-slate-400 text-sm hidden sm:inline">{user?.name}</span>
+
+        <button
+          onClick={toggle}
+          aria-label="Toggle dark mode"
+          className="text-slate-400 hover:text-white text-lg leading-none px-1"
+        >
+          {dark ? '☀️' : '🌙'}
+        </button>
+
         <button
           onClick={handleLogout}
           className="bg-slate-700 hover:bg-slate-600 text-sm px-3 py-1.5 rounded"

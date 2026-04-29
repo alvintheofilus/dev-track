@@ -40,9 +40,8 @@
 
 ### Phase 3 — Polish & Stand Out (Week 5+)
 - [ ] Dark mode toggle
-- [ ] Deploy to production (Vercel + Railway)
+- [ ] Deploy to production (Vercel + Render)
 - [ ] Write full README with screenshots + live demo link
-- [ ] Add Docker Compose for local dev
 - [ ] Loading skeletons & error states
 
 ---
@@ -63,7 +62,6 @@
 | Email | NodeMailer | Follow-up reminders |
 | Deploy (FE) | Vercel | Free frontend hosting |
 | Deploy (BE) | Render | Free backend hosting (Railway dropped free tier 2023) |
-| Bonus | Docker | Local dev environment |
 
 ---
 
@@ -212,7 +210,6 @@ devtrack/
 
 ### Week 5+ — Upgrade
 - Add dark mode
-- Add Docker Compose
 - Add loading skeletons
 - Improve accessibility
 

@@ -87,13 +87,13 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-900">
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 py-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">Applications</h1>
-            <p className="text-sm text-slate-500">
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Applications</h1>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               {displayJobs.length !== jobs.length
                 ? `${displayJobs.length} of ${jobs.length}`
                 : `${jobs.length} total`}
