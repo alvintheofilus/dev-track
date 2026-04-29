@@ -2,7 +2,7 @@
 
 > Track every job application from first apply to final offer.
 
-**Live Demo:** [devtrack.vercel.app](https://devtrack.vercel.app)
+**Live Demo:** [dev-track-blush.vercel.app](https://dev-track-blush.vercel.app)
 
 ## Features
 
